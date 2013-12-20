@@ -5,11 +5,12 @@ FROM jayofdoom/docker-ubuntu-14.04
 MAINTAINER Jay Faulkner "jay.faulkner@rackspace.com"
 
 # software-properties-common contains "add-apt-repository" command for PPA conf
-RUN apt-get update && apt-get install -y software-properties-common
+RUN apt-get update && apt-get install -y software-properties-common curl
 
 # Configure java PPA + Datastax cassandra repositories
 RUN add-apt-repository -y ppa:webupd8team/java 
 RUN echo "deb http://debian.datastax.com/community stable main" > /etc/apt/sources.list.d/cassandra.list
+RUN curl -L https://debian.datastax.com/debian/repo_key | apt-key add -
 RUN apt-get update
 
 # Install and set oracle java 7 as default
@@ -24,7 +25,7 @@ RUN ln -s /usr/share/java/jna.jar /usr/share/cassandra/lib
 
 # Fix/write config files
 ADD src/supervisord.conf /etc/supervisor/supervisord.conf
-RUN echo -e "[program:cassandra]\ncommand=/bin/sh /etc/init.d/cassandra start" > /etc/supervisor/conf.d/cassandra.conf
+ADD src/cassandra.conf /etc/supervisor/conf.d/cassandra.conf
 ADD src/launch_cass.sh /launch_cass.sh
 
 EXPOSE 9160
