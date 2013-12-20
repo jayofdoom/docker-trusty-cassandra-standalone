@@ -19,13 +19,9 @@ RUN apt-get -y install oracle-java7-installer oracle-java7-set-default
 ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
 
 # Install cassandra and related utilities
-RUN apt-get install -y libjna-java dsc20 python-cql supervisor
+RUN apt-get install -y libjna-java dsc20 python-cql
 RUN ln -s /usr/share/java/jna.jar /usr/share/cassandra/lib
 
-
-# Fix/write config files
-ADD src/supervisord.conf /etc/supervisor/supervisord.conf
-ADD src/cassandra.conf /etc/supervisor/conf.d/cassandra.conf
 ADD src/launch_cass.sh /launch_cass.sh
 
 EXPOSE 9160

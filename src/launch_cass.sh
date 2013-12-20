@@ -4,4 +4,5 @@ LOCAL_IP=`ip a s dev eth0 | grep 'inet ' | cut -d/ -f1 | awk '{print $2}'`
 # the configuration at runtime to include it
 sed -i "s/localhost/$LOCAL_IP/" /etc/cassandra/cassandra.yaml
 sed -i "s/127.0.0.1/$LOCAL_IP/" /etc/cassandra/cassandra.yaml
-/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+. /etc/cassandra/cassandra-env.sh
+/usr/sbin/cassandra -f
